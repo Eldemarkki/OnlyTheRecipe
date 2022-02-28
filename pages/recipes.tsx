@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { RecipesQueryParameters } from '.'
 import Layout from '../components/layout'
+import { tokenizeIngredient } from '../lib/ingredientTokenizer'
 import { defaultRecipeData, GetOrCreateRecipeEntry } from './api/recipes'
 
 const domainNotSupported = (url: string) => {
@@ -77,7 +78,19 @@ export default function Recipe() {
                     (
                         <>
                             <h3 key={`${section.sectionName}-${idx}`}>{section.sectionName}</h3>
-                            { section.ingredients?.map((val, i) => <p key={`${val}-${i}}`}>{val}</p>) }
+                            { section.ingredients?.map((ingredient) => {
+                                const chunks = tokenizeIngredient(ingredient)
+                                return <p key={ingredient}>
+                                    {chunks.map(chunk => {
+                                        if (chunk.token) {
+                                            return <span style={{ backgroundColor: "#a6ccdf", padding: "1px 3px" }}>{chunk.text}</span>
+                                        }
+                                        else {
+                                            return chunk.text
+                                        }
+                                    })}
+                                </p>
+                            })}
                         </>
                     )
                 )}
