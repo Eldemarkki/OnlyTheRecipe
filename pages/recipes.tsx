@@ -83,7 +83,7 @@ export default function Recipe() {
                                 return <p key={ingredient}>
                                     {chunks.map(chunk => {
                                         if (chunk.token) {
-                                            return <span style={{ backgroundColor: "#a6ccdf", padding: "1px 3px" }}>{chunk.text}</span>
+                                            return <span style={{ backgroundColor: "#a6ccdf", padding: "1px 5px", borderRadius: 7 }}>{chunk.text}</span>
                                         }
                                         else {
                                             return chunk.text
@@ -95,7 +95,19 @@ export default function Recipe() {
                     )
                 )}
                 <h1>Directions</h1>
-                { directions.map((direction, idx) => <p key={`${direction}-${idx}`}>{direction}</p>) }
+                { directions.map((direction) => {
+                    const chunks = tokenizeIngredient(direction)
+                    return <p key={direction}>
+                        {chunks.map(chunk => {
+                            if (chunk.token) {
+                                return <span style={{ backgroundColor: "#a6ccdf", padding: "1px 5px", borderRadius: 7 }}>{chunk.text}</span>
+                            }
+                            else {
+                                return chunk.text
+                            }
+                        })}
+                    </p>
+                }) }
             </div>
         </Layout>
     )

@@ -11,10 +11,16 @@ const units = [
     "lb\\.", // TODO: Make dot optional
     "oz",
     "pound",
-    "in\\." // TODO: Make dot optional
+    "in\\.", // TODO: Make dot optional
+    "min",
+    "cm"
 ]
 
 const substitutions: { [key: string]: string } = {
+    "—": "-"
+}
+
+const numericalSubstitutions: { [key: string]: string } = {
     "½": "0.5",
     "1/2": "0.5",
     "¼": "0.25",
@@ -81,7 +87,16 @@ export const getTokens = (ingredient: string) => {
         const matches = transformedIngredient.match(new RegExp(`(${substitution})`, "g"));
         if (matches) {
             matches.forEach(m => {
-                const dec: string = substitutions[substitution];
+                transformedIngredient = transformedIngredient.replace(m, substitutions[m]);
+            })
+        }
+    });
+
+    Object.keys(numericalSubstitutions).forEach(substitution => {
+        const matches = transformedIngredient.match(new RegExp(`(${substitution})`, "g"));
+        if (matches) {
+            matches.forEach(m => {
+                const dec: string = numericalSubstitutions[substitution];
                 const withDecimals = m.replace(/\s+/g, " ").replace(substitution, String(dec));
                 const sum = withDecimals.split(" ").reduce((prev, curr) => prev + Number(curr), 0);
                 transformedIngredient = transformedIngredient.replace(m, String(sum));
