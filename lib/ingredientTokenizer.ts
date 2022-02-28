@@ -77,12 +77,12 @@ const parseParts = (ingredient: string): IngredientSlice[] => {
 export const getTokens = (ingredient: string) => {
     let transformedIngredient = ingredient;
 
-    Object.keys(substitutions).forEach(unicodeChar => {
-        const matches = transformedIngredient.match(new RegExp(`(${unicodeChar})`, "g"));
+    Object.keys(substitutions).forEach(substitution => {
+        const matches = transformedIngredient.match(new RegExp(`(${substitution})`, "g"));
         if (matches) {
             matches.forEach(m => {
-                const dec: string = substitutions[unicodeChar];
-                const withDecimals = m.replace(/\s+/g, " ").replace(unicodeChar, String(dec));
+                const dec: string = substitutions[substitution];
+                const withDecimals = m.replace(/\s+/g, " ").replace(substitution, String(dec));
                 const sum = withDecimals.split(" ").reduce((prev, curr) => prev + Number(curr), 0);
                 transformedIngredient = transformedIngredient.replace(m, String(sum));
             })
