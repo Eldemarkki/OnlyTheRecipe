@@ -12,7 +12,7 @@ const units = [
     "oz",
     "pound",
     "in\\.", // TODO: Make dot optional
-    "min",
+    "min|minuuttia",
     "cm"
 ]
 
@@ -111,6 +111,7 @@ export const getTokens = (ingredient: string) => {
     }
 }
 
+// TODO: Rename to tokenizeIngredients
 export const tokenizeIngredient = (ingredient: string) => {
     const tokens = getTokens(ingredient)
     const splits = tokens.amounts.reduce<number[]>((prev, curr) => [...prev, curr.textSlice[0], curr.textSlice[1]], []).filter(s => s !== tokens.transformedIngredient.length)
